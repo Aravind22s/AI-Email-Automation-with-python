@@ -7,14 +7,18 @@ import base64
 from bs4 import BeautifulSoup
 import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TOKEN_PATH = os.path.join(BASE_DIR, "config", "token.json")
+CREDENTIALS_PATH = os.path.join(BASE_DIR, "config", "credentials.json")
+
 SCOPES = ["https://www.googleapis.com/auth/gmail.modify"]
 
 def authenticate():
     creds = None
     
     #load existing token
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+    if os.path.exists(TOKEN_PATH):
+        creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
         print
         
     #if token is missing or expired
@@ -23,12 +27,12 @@ def authenticate():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "credentials.json",
+                "TOKEN_PATH",
                 SCOPES)
             creds = flow.run_local_server(port=0)
         
         #save token
-        with open("token.json", "w") as token:
+        with open("TOKEN_PATH", "w") as token:
             token.write(creds.to_json())
     return creds
 
