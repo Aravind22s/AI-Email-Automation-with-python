@@ -27,13 +27,13 @@ def authenticate():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                "TOKEN_PATH",
+                "CREDENTIALS_PATH",
                 SCOPES)
             creds = flow.run_local_server(port=0)
         
-        #save token
-        with open("TOKEN_PATH", "w") as token:
-            token.write(creds.to_json())
+            #save token
+            with open("TOKEN_PATH", "w") as token:
+                token.write(creds.to_json())
     return creds
 
 def get_service():
