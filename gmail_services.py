@@ -150,3 +150,53 @@ def extract_email_data(message):
         "date": date,
         "body": body,
         "has_attachment": has_attachment(payload)}
+    
+def get_or_create_label(label_name):
+    service = get_service()
+    # Get existing labels
+    labels = service.users().labels().list(userId="me").execute()
+    for label in labels.get("labels", []):
+        if label["name"] == label_name:
+            return label["id"]
+    
+    body = {
+        "name": label_name,
+        "labelListVisibility": "labelShow",
+        "messageListVisibility": "show"
+    }
+    
+    label = service.users().labels().create(userId="me", body=body).execute()
+    return label["id"]
+
+def add_label(message_id, label_name):
+    service = get_service()
+    label_id = get_or_create_label(label_name)
+    service.users().messages().modify(
+        userId="me",
+        id=message_id,
+        body={"addLabelIds": [label_id]}
+    ).execute()
+    
+def mark_as_read(message_id):
+    service = get_service()
+    service.users().messages().modify(
+        userId="me",
+        id=message_id,
+        body={"removeLabelIds": ["UNREAD"]}
+    ).execute()
+    
+def already_replied(message):
+    labels = message.get("labelIds", [])
+    service = get_service()
+    gmail_labels = service.users().labels().list(userId="me").execute()
+    ai_label = None
+    
+    for label in gmail_labels.get("labels", []):
+        if label["name"] == "AI Replied":
+            ai_label = label["id"]
+            break
+        
+    if ai_label is None:
+        return False
+    
+    return ai_label in labels
