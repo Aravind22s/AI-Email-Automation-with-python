@@ -27,11 +27,11 @@ jobs:
       
       - name: create credentials.json file
         run: |
-          echo "${{ secrets.CREDENTIAL_KEY }}" > config/credentials.json
+          echo "${{ secrets.CREDENTIAL_KEY }}" | base64 --decode > config/credentials.json
       
       - name: create token.json file
         run: |
-          echo "${{ secrets.TOKEN_KEY }}" > config/token.json
+          echo "${{ secrets.TOKEN_KEY }}" | base64 --decode > config/token.json
           
       - name: Run the bot script
         env:
