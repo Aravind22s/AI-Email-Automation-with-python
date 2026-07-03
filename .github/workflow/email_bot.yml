@@ -25,7 +25,7 @@ jobs:
       - name: Run the bot script
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          CREDENTIAL_KEY: ${{ secrets.CREDENTIAL_KEY }}
+          TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
         run: |
           python app.py
