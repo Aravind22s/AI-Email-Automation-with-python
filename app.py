@@ -73,10 +73,7 @@ def main():
                 data["subject"],
                 "AI Reply Generation Failed" 
             ) 
-            continue
-        
-        choice = input("Do you want to send the reply? (y/n): ")
-        
+            continue        
         
         try:
             sent_message = send_email(
