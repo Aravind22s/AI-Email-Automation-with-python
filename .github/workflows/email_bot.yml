@@ -1,7 +1,7 @@
 name : AI Email Automation
 on:
   schedule:
-    - cron: '*/1 * * * *' 
+    - cron: '*/5 * * * *' 
   
   workflow_dispatch:
 
@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -22,10 +22,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Create congig directory
+        run: mkdir -p config
+      
+      - name: create credentials.json file
+        run: |
+          echo "${{ secrets.CREDENTIAL_KEY }}" > config/credentials.json
+      
+      - name: create token.json file
+        run: |
+          echo "${{ secrets.TOKEN_KEY }}" > config/token.json
+          
       - name: Run the bot script
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          CREDENTIAL_KEY: ${{ secrets.CREDENTIAL_KEY }}
-          TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
         run: |
           python app.py
