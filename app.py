@@ -77,27 +77,25 @@ def main():
         
         choice = input("Do you want to send the reply? (y/n): ")
         
-        if choice.lower() == 'y':
-            try:
-                sent_message = send_email(
-                    sender=data["sender_email"],
-                    reciver=data["sender_email"],
-                    subject=data["subject"],
-                    body=result["reply"],
-                    thread_id=data["thread_id"]
-                )
-                print(f"Reply sent successfully! Message ID: {sent_message['id']}")
-            except Exception as e:
-                print(f"Error sending email: {e}")
-                save_email_log(
-                    data["message_id"],
-                    data["sender_email"],
-                    data["subject"],
-                    "Email Sending Failed" 
-                ) 
-                continue
-        else:
-            print("Reply Cancelled.")
+        
+        try:
+            sent_message = send_email(
+                sender=data["sender_email"],
+                reciver=data["sender_email"],
+                subject=data["subject"],
+                body=result["reply"],
+                thread_id=data["thread_id"]
+            )
+            print(f"Reply sent successfully! Message ID: {sent_message['id']}")
+        except Exception as e:
+            print(f"Error sending email: {e}")
+            save_email_log(
+                data["message_id"],
+                data["sender_email"],
+                data["subject"],
+                "Email Sending Failed" 
+            )                 
+            continue
         
         print("CATEGORY")
         print(result["category"])
