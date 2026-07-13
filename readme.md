@@ -8,7 +8,7 @@ This project provides an automated AI-powered agent that monitors a Gmail inbox 
 
 The project is structured modularly, separating concerns between API interfaces, classification/reply generation, prompting, logging, and application control:
 
-```
+```text
 AI_Email_automation/
 │
 ├── config/
@@ -55,13 +55,16 @@ graph TD
 ## 📄 File Descriptions
 
 ### 🚀 Entry Point
+
 * **[app.py](file:///c:/Users/aravi/Projects/AI_Email_automation/app.py)**: The orchestrator. It fetches inbox entries, checks if they have been processed already, directs the classification and generation stages, handles failures gracefully, transmits the replies, and manages labels and logging.
 
 ### 📧 Gmail Integration & Messaging
+
 * **[gmail_services.py](file:///c:/Users/aravi/Projects/AI_Email_automation/gmail_services.py)**: Manages OAuth 2.0 flow with Google. Decodes Base64 payloads, sanitizes HTML to text (using `BeautifulSoup4`), extracts attachments presence, checks if the thread was already replied to, and handles label modifications.
 * **[email_sender.py](file:///c:/Users/aravi/Projects/AI_Email_automation/email_sender.py)**: Wraps raw email data into proper `MIMEText` structures, sets headers (such as threading matching via `In-Reply-To` parameters), and dispatches it over Gmail's raw sending endpoint.
 
 ### 🧠 AI & LLM Components
+
 * **[email_classifier.py](file:///c:/Users/aravi/Projects/AI_Email_automation/email_classifier.py)**: Passes email subject and body to the `gemini-2.5-flash` model to categorize it into one of: `GENERAL`, `HR`, `INTERVIEW`, `CUSTOMER_SUPPORT`, `COMPLAINT`, `SALES`, or `LEAVE_REQUEST`.
 * **[ai_service.py](file:///c:/Users/aravi/Projects/AI_Email_automation/ai_service.py)**: Interfaces with `gemini-3.1-flash-lite` to compose clean, professional, and contextually matching replies based on the selected prompt category.
 * **[prompt.py](file:///c:/Users/aravi/Projects/AI_Email_automation/prompt.py)**: Stores role-specific prompts tailored for each business domain (e.g., persuasive for Sales, empathetic for Customer Support, policy-adherent for HR).
@@ -69,6 +72,7 @@ graph TD
 * **[email_context.py](file:///c:/Users/aravi/Projects/AI_Email_automation/email_context.py)**: Constructs structured user queries containing sender metadata and message body.
 
 ### 📝 Utility & Logging
+
 * **[logger.py](file:///c:/Users/aravi/Projects/AI_Email_automation/logger.py)**: Performs quick checkups on a local database file `logs.json` to prevent re-processing emails that have already received automated responses.
 * **[decode.py](file:///c:/Users/aravi/Projects/AI_Email_automation/decode.py)**: Helper to convert credentials files to base64 encoding strings when configuring deployment servers.
 
@@ -77,20 +81,25 @@ graph TD
 ## ⚙️ Configuration & Installation
 
 ### 1. Prerequisites
+
 Ensure you have Python 3.10+ installed.
 
 ### 2. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 3. Setup Gemini API Key
+
 Create a `.env` file in the root directory:
+
 ```env
 GEMINI_API_KEY=your_actual_gemini_api_key_here
 ```
 
 ### 4. Enable Google Gmail API & Setup OAuth
+
 1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
 2. Create a new project and enable the **Gmail API**.
 3. Configure the **OAuth Consent Screen** (specify User Type: External, and add your test email addresses).
@@ -102,6 +111,7 @@ GEMINI_API_KEY=your_actual_gemini_api_key_here
 ## 🏃 How to Run
 
 Execute the main program:
+
 ```bash
 python app.py
 ```
